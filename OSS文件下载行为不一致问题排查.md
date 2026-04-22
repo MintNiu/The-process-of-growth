@@ -140,26 +140,6 @@ public ResponseEntity<Map<String, Object>> getDownloadUrl(@RequestParam("file") 
 
 ---
 
-### 修改点 4：增加 Swagger 配置
-
-**文件**：`Swagger3Config.java`
-
-添加 `/download` 路径的 Docket 配置，使接口文档可见：
-
-```java
-@Bean
-public Docket downloadApiConfig() {
-    return new Docket(DocumentationType.OAS_30)
-            .groupName("文件下载")
-            .select()
-            .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-            .paths(PathSelectors.regex("/(download|deleteFile|moveFile|compareBuckets).*"))
-            .build();
-}
-```
-
----
-
 ## 📦 涉及文件清单
 
 | 文件路径 | 修改内容 |
@@ -167,7 +147,6 @@ public Docket downloadApiConfig() {
 | `plugins/aliyunOss/src/main/java/com/bit/aliyunoss/AliOssUtil.java` | 1. 上传时设置 `Content-Disposition: attachment`<br>2. 增加 `getBucketConfig()` 和 `compareBucketConfigs()` 方法<br>3. 增加上传后元数据检查日志 |
 | `sys/src/main/java/com/bit/sys/common/utils/DownFileUtil.java` | 1. `getDownloadUrl()` 增加 `forceDownload` 参数<br>2. 增加 `updateOssMetadataSync()` 同步更新元数据<br>3. 移除基于 URL 的缓存逻辑，改为每次检查真实元数据 |
 | `sys/src/main/java/com/bit/sys/controller/DownloadController.java` | 1. 调用 `getDownloadUrl()` 时传入 `true`<br>2. 增加 `/compareBuckets` 接口用于对比 Bucket 配置 |
-| `web/src/main/java/com/bit/web/config/Swagger3Config.java` | 增加 `/download` 路径的 Docket 配置 |
 
 ---
 
